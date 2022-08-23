@@ -7,15 +7,19 @@ using namespace cv;
 int main(){
 	VideoCapture vid_capture(0);
 
-	int Frame_Height = vid_capture.get(CAP_PROP_FRAME_HEIGHT);
-	cout << "Hight of Frame: " << Frame_Height << endl;
+    //not neccesery 
+	if (!vid_capture.isOpened()){
+		cout << "Couldnt Open Webcam!" << endl;
+	}
+	else {
+		int Frame_Hight = vid_capture.get(CAP_PROP_FRAME_HEIGHT);
+		cout << "Hight of Frame: " << Frame_Hight << endl;
 
-	int Frame_Width = vid_capture.get(CAP_PROP_FRAME_WIDTH);
-	cout << "Width of Frame: " << Frame_Width << endl;
-	
-	Size frame_size(Frame_Width, Frame_Height);
-    VideoWriter output("Record.avi", VideoWriter::fourcc('M', 'J', 'P', 'G'),10, frame_size);
-
+		int Frame_Width = vid_capture.get(CAP_PROP_FRAME_WIDTH);
+		cout << "Width of Frame: " << Frame_Width << endl;
+	}
+    //till here
+    
 	while (vid_capture.isOpened()){
 		Mat frame;
 		bool framefound = vid_capture.read(frame);
@@ -23,7 +27,6 @@ int main(){
 		if(framefound == true){
             namedWindow("Frame", WINDOW_AUTOSIZE);
 			imshow("Frame", frame);
-			output.write(frame);
     		int key = waitKey(1);
     		if (key == 'q'){
     			cout << "Stopping... " << endl;
@@ -36,7 +39,6 @@ int main(){
     }
 	
 	vid_capture.release();
-	output.release();
 	destroyAllWindows();
 	return 0;
 }
